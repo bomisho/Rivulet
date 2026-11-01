@@ -62,7 +62,18 @@ struct RivuletiOSApp: App {
     }
 
     var body: some Scene {
-        WindowGroup {
+        mainWindow
+        #if os(visionOS)
+        // Theater modes: an environment around the player window.
+        ImmersiveSpace(id: VisionTheater.spaceID) {
+            TheaterSpaceView()
+        }
+        .immersionStyle(selection: .constant(.full), in: .full)
+        #endif
+    }
+
+    private var mainWindow: some Scene {
+        let window = WindowGroup {
             IOSRootView()
                 .environmentObject(plex)
                 .environmentObject(IOSDownloadCenter.shared)
@@ -70,14 +81,11 @@ struct RivuletiOSApp: App {
         #if os(visionOS)
         // A landscape window sized like a large iPad: the iPad layouts (split
         // views, regular-width grids) apply, and it can be resized freely.
-        .defaultSize(width: 1366, height: 900)
-        .windowResizability(.contentMinSize)
-
-        // Theater modes: an environment around the player window.
-        ImmersiveSpace(id: VisionTheater.spaceID) {
-            TheaterSpaceView()
-        }
-        .immersionStyle(selection: .constant(.full), in: .full)
+        return window
+            .defaultSize(width: 1366, height: 900)
+            .windowResizability(.contentMinSize)
+        #else
+        return window
         #endif
     }
 
