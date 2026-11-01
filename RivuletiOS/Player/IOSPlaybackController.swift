@@ -161,13 +161,20 @@ final class IOSPlaybackController: NSObject, ObservableObject {
         let aspect = video.width / video.height
         let width = max(current.width, 1280)
         let size = CGSize(width: width, height: (width / aspect).rounded())
-        scene.requestGeometryUpdate(.Vision(size: size, resizingRestrictions: .uniform)) { _ in }
+        requestWindow(size, restrictions: .uniform, in: scene)
+    }
+
+    private func requestWindow(_ size: CGSize, restrictions: UIWindowScene.ResizingRestrictions, in scene: UIWindowScene) {
+        let preferences = UIWindowScene.GeometryPreferences.Vision()
+        preferences.size = size
+        preferences.resizingRestrictions = restrictions
+        scene.requestGeometryUpdate(preferences) { _ in }
     }
 
     private func restoreWindowSize() {
         guard let size = sizeBeforePlayback, let scene = windowScene else { return }
         sizeBeforePlayback = nil
-        scene.requestGeometryUpdate(.Vision(size: size, resizingRestrictions: .freeform)) { _ in }
+        requestWindow(size, restrictions: .freeform, in: scene)
     }
     #endif
 
