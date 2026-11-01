@@ -20,8 +20,14 @@ struct RivuletiOSApp: App {
         #if DEBUG
         IOSScreenshotMode.seedSession()
         #endif
+        // visionOS keeps the "iOS" platform string: Plex picks its transcode
+        // profile by platform, and the iOS one is what this app's player expects.
         PlexAPI.platform = "iOS"
+        #if os(visionOS)
+        PlexAPI.deviceName = "Apple Vision Pro"
+        #else
         PlexAPI.deviceName = UIDevice.current.model   // "iPhone" / "iPad"
+        #endif
         let session = IOSPlexSession()
         session.installProfileHooks()
         _plex = StateObject(wrappedValue: session)
@@ -29,7 +35,11 @@ struct RivuletiOSApp: App {
         _ = NetworkPathMonitor.shared
         // Recreates the background session and resumes unfinished downloads.
         IOSDownloadCenter.shared.start()
+        #if !os(visionOS)
+        // Continued-processing tasks (the download Live Activity) are iOS-only;
+        // on visionOS the background URLSession carries the transfers alone.
         IOSDownloadActivity.shared.start()
+        #endif
         // Folds the old single-source settings into the shared store, then
         // warms the guide so the Live TV tab opens with data.
         Task {
@@ -57,6 +67,12 @@ struct RivuletiOSApp: App {
                 .environmentObject(plex)
                 .environmentObject(IOSDownloadCenter.shared)
         }
+        #if os(visionOS)
+        // A landscape window sized like a large iPad: the iPad layouts (split
+        // views, regular-width grids) apply, and it can be resized freely.
+        .defaultSize(width: 1366, height: 900)
+        .windowResizability(.contentMinSize)
+        #endif
     }
 
     /// One-time migration from the POC's own session keys to the shared

@@ -251,10 +251,13 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             Spacer()
             GlassEffectContainer(spacing: 8) {
                 HStack(spacing: 8) {
+                    #if !os(visionOS)
+                    // Vision Pro is the screen; there is nothing to route video to.
                     IOSRoutePicker()
                         .frame(width: 44, height: 44)
                         .glassEffect(.regular.interactive(), in: .circle)
                         .accessibilityLabel("AirPlay")
+                    #endif
                     glassButton(
                         isMuted ? "Unmute" : "Mute",
                         systemImage: isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill",
@@ -848,6 +851,7 @@ private struct IOSPlayerGestureSurface: UIViewRepresentable {
     }
 }
 
+#if !os(visionOS)
 /// The system AirPlay button.
 private struct IOSRoutePicker: UIViewRepresentable {
     func makeUIView(context: Context) -> AVRoutePickerView {
@@ -859,3 +863,4 @@ private struct IOSRoutePicker: UIViewRepresentable {
 
     func updateUIView(_ uiView: AVRoutePickerView, context: Context) {}
 }
+#endif

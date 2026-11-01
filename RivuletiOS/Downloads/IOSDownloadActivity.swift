@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 // Copyright (C) 2025-2026 Bain Gurley
 
+#if !os(visionOS)
 import BackgroundTasks
 import Combine
 import UIKit
@@ -116,3 +117,5 @@ extension DownloadRecord {
         }
     }
 }
+
+#endif

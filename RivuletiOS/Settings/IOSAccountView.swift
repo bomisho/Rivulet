@@ -42,12 +42,15 @@ struct IOSAccountView: View {
                     } label: {
                         Label("Downloads", systemImage: "arrow.down.circle")
                     }
+                    #if !os(visionOS)
+                    // visionOS has a single layered icon and no alternates.
                     Picker(selection: Binding(get: { appIcon }, set: { appIcon = $0; $0.apply() })) {
                         ForEach(AppIcon.allCases) { Text($0.title).tag($0) }
                     } label: {
                         Label("App Icon", systemImage: "app.badge")
                     }
                     .pickerStyle(.navigationLink)
+                    #endif
                     // Sources and server choice are the owner's, not a restricted profile's.
                     if !profiles.isRestrictedProfile {
                         NavigationLink {
