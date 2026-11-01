@@ -201,13 +201,13 @@ struct IOSPlexConnectionSheet: View {
                                 Label("Open plex.tv/link", systemImage: "safari")
                                     .frame(maxWidth: .infinity)
                             }
-                            .buttonStyle(.glassProminent)
+                            .glassProminentButtonStyle()
                         }
                         Button { UIPasteboard.general.string = code } label: {
                             Label("Copy Code", systemImage: "doc.on.doc")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.glass)
+                        .glassButtonStyle()
                     }
                     .controlSize(.large)
                     .frame(maxWidth: 360)

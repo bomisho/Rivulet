@@ -284,7 +284,7 @@ private struct IOSPlexDetailHeader: View {
                         endPoint: .bottom
                     )
                 }
-                .backgroundExtensionEffect()
+                .platformBackgroundExtensionEffect()
                 // The art and its scrim fade out into the page's ambient wash.
                 .mask {
                     LinearGradient(
@@ -374,7 +374,7 @@ private struct IOSPlexDetailHeader: View {
                 } label: {
                     Image(systemName: "ellipsis").frame(width: 22, height: 22)
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
                 .buttonBorderShape(.circle)
                 .accessibilityLabel("More")
             }
@@ -396,7 +396,7 @@ private struct IOSPlexDetailHeader: View {
             .lineLimit(1)
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.glassProminent)
+        .glassProminentButtonStyle()
         .disabled(playTarget == nil)
         .opacity(playTarget == nil && isLoading ? 0.6 : 1)
     }
@@ -426,7 +426,7 @@ private struct IOSPlexDetailHeader: View {
         Button(action: action) {
             Image(systemName: symbol).frame(width: 22, height: 22)
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .buttonBorderShape(.circle)
         .accessibilityLabel(label)
     }

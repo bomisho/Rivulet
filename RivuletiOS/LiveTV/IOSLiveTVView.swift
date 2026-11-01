@@ -52,7 +52,7 @@ struct IOSLiveTVView: View {
                 Text("Connect Plex Live TV, Dispatcharr, or a playlist from your provider.")
             } actions: {
                 Button("Add Source") { showingAddSource = true }
-                    .buttonStyle(.glassProminent)
+                    .glassProminentButtonStyle()
             }
         } else if store.channels.isEmpty {
             ScrollView {

@@ -189,7 +189,7 @@ struct IOSDownloadButton: View {
             } label: {
                 icon(record).frame(width: 22, height: 22)
             }
-            .buttonStyle(.glass)
+            .glassButtonStyle()
             .buttonBorderShape(.circle)
             .accessibilityLabel("Download")
             .accessibilityValue([record.statusText, record.percentText].compactMap { $0 }.joined(separator: ", "))
@@ -197,7 +197,7 @@ struct IOSDownloadButton: View {
             Button { actions.download(item) } label: {
                 Image(systemName: "arrow.down").frame(width: 22, height: 22)
             }
-            .buttonStyle(.glass)
+            .glassButtonStyle()
             .buttonBorderShape(.circle)
             .disabled(!plex.isConfigured)
             .accessibilityLabel("Download")

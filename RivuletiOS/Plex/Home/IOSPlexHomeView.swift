@@ -46,7 +46,7 @@ struct IOSPlexHomeView: View {
                     .onScrollGeometryChange(for: Bool.self) { scroll in
                         scroll.contentOffset.y + scroll.contentInsets.top < IOSPlexHomeHero.height(for: fullSize(proxy)) - 120
                     } action: { _, under in heroUnderBar = under }
-                    .scrollEdgeEffectHidden(hero && heroUnderBar, for: .top)
+                    .platformScrollEdgeEffectHidden(hero && heroUnderBar, for: .top)
                     .refreshable { await plex.refresh() }
                     .task(id: hero ? heroItems.map(\.id) + ["\(heroPageWidth(proxy))"] : []) {
                         if hero { await prefetchHero(width: heroPageWidth(proxy)) }

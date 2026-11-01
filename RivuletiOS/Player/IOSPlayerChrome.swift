@@ -239,7 +239,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
 
     private var topBar: some View {
         HStack(alignment: .top) {
-            GlassEffectContainer(spacing: 8) {
+            PlatformGlassContainer(spacing: 8) {
                 HStack(spacing: 8) {
                     glassButton("Close", systemImage: "xmark", action: actions.close)
                         .keyboardShortcut(.cancelAction)
@@ -249,13 +249,13 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 }
             }
             Spacer()
-            GlassEffectContainer(spacing: 8) {
+            PlatformGlassContainer(spacing: 8) {
                 HStack(spacing: 8) {
                     #if !os(visionOS)
                     // Vision Pro is the screen; there is nothing to route video to.
                     IOSRoutePicker()
                         .frame(width: 44, height: 44)
-                        .glassEffect(.regular.interactive(), in: .circle)
+                        .platformGlass(in: .circle, interactive: true)
                         .accessibilityLabel("AirPlay")
                     #endif
                     glassButton(
@@ -304,7 +304,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
 
             if canSkip { skipButton(forward: true) }
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .buttonBorderShape(.circle)
     }
 
@@ -362,7 +362,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             } else {
                 Button("Go Live") { interact(actions.goLive) }
                     .font(.caption.weight(.semibold))
-                    .buttonStyle(.glass)
+                    .glassButtonStyle()
             }
         }
     }
@@ -431,7 +431,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 6)
         }
-        .glassEffect(.regular.interactive(), in: .capsule)
+        .platformGlass(in: .capsule, interactive: true)
         .accessibilityLabel("Playback speed")
     }
 
@@ -453,7 +453,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .frame(minHeight: 44)
                 .padding(.horizontal, 12)
         }
-        .glassEffect(.regular.interactive(), in: .capsule)
+        .platformGlass(in: .capsule, interactive: true)
         .accessibilityLabel("Quality")
         .accessibilityValue(quality.label)
     }
@@ -487,7 +487,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .font(.body.weight(.semibold))
                 .frame(width: 44, height: 44)
         }
-        .glassEffect(.regular.interactive(), in: .circle)
+        .platformGlass(in: .circle, interactive: true)
         .accessibilityLabel("Audio and Subtitles")
     }
 
@@ -525,7 +525,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             Spacer()
             HStack(spacing: 8) {
                 Spacer()
-                GlassEffectContainer(spacing: 8) {
+                PlatformGlassContainer(spacing: 8) {
                     HStack(spacing: 8) {
                         if let cancel = item.cancel {
                             glassButton("Cancel", systemImage: "xmark", action: cancel)
@@ -541,7 +541,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                             .padding(.horizontal, 8)
                             .frame(minHeight: 36)
                         }
-                        .buttonStyle(.glass)
+                        .glassButtonStyle()
                     }
                 }
             }
@@ -564,17 +564,17 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .multilineTextAlignment(.center)
             HStack(spacing: 12) {
                 Button("Close", action: actions.close)
-                    .buttonStyle(.glass)
+                    .glassButtonStyle()
                 if failure.canRetry {
                     // The chrome's white tint fills this button, so the label goes dark.
                     Button(action: actions.retry) { Text("Retry").foregroundStyle(.black) }
-                        .buttonStyle(.glassProminent)
+                        .glassProminentButtonStyle()
                 }
             }
         }
         .padding(24)
         .frame(maxWidth: 380)
-        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .platformGlass(in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .padding()
     }
 
@@ -589,7 +589,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 14)
-            .glassEffect(.regular, in: .capsule)
+            .platformGlass(in: .capsule)
             .padding(.horizontal, 48)
             if ripple.leading { Spacer() }
         }
@@ -604,7 +604,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .font(.body.weight(.semibold))
                 .frame(width: 30, height: 30)
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .buttonBorderShape(.circle)
         .accessibilityLabel(label)
     }

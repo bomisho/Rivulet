@@ -103,7 +103,7 @@ struct IOSLiveProgrammeSheet: View {
                     Label(airing ? "Watch" : "Watch \(channel.name) Live", systemImage: "play.fill")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.glassProminent)
+                .glassProminentButtonStyle()
             }
             HStack(spacing: 10) {
                 recordButton
@@ -129,7 +129,7 @@ struct IOSLiveProgrammeSheet: View {
                     Label(recording.status == .recording ? "Recording" : "Scheduled", systemImage: "record.circle.fill")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
                 .tint(.red)
             } else {
                 Button {
@@ -137,7 +137,7 @@ struct IOSLiveProgrammeSheet: View {
                 } label: {
                     Label("Record", systemImage: "record.circle").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
                 .disabled(recorder.isLoadingOptions)
             }
         }
@@ -151,7 +151,7 @@ struct IOSLiveProgrammeSheet: View {
             Label(isFavorite ? "Favorite" : "Add to Favorites", systemImage: isFavorite ? "star.fill" : "star")
                 .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .sensoryFeedback(.selection, trigger: isFavorite)
         .accessibilityLabel(isFavorite ? "Remove from Favorites" : "Add to Favorites")
     }

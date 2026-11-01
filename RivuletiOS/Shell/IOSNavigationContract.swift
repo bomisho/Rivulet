@@ -48,9 +48,13 @@ struct IOSAccountButton: View {
 /// circle stands alone, and the spacer keeps it out of any neighbouring button group.
 struct IOSAccountToolbarItem: ToolbarContent {
     var body: some ToolbarContent {
+        #if os(visionOS)
+        ToolbarItem(placement: .topBarTrailing) { IOSAccountButton() }
+        #else
         ToolbarSpacer(.fixed, placement: .topBarTrailing)
         ToolbarItem(placement: .topBarTrailing) { IOSAccountButton() }
             .sharedBackgroundVisibility(.hidden)
+        #endif
     }
 }
 

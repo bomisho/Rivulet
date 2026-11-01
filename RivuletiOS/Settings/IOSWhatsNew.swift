@@ -112,7 +112,7 @@ struct IOSWhatsNewSheet: View {
             } label: {
                 Text("Continue").frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glassProminent)
+            .glassProminentButtonStyle()
             .controlSize(.large)
             .padding(.horizontal, 28)
             .padding(.vertical, 20)

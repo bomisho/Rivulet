@@ -71,8 +71,10 @@ struct IOSRootView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        #if !os(visionOS)
         .tabViewSearchActivation(.searchTabSelection)
         .tabBarMinimizeBehavior(.onScrollDown)
+        #endif
         .environment(\.openAccount) { showingAccount = true }
         .environment(\.openDownloads, openDownloads)
         .sheet(isPresented: $showingAccount) { IOSAccountView() }

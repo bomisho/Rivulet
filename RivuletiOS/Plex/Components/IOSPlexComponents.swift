@@ -649,8 +649,12 @@ extension GeometryProxy {
     /// iPhone Duo's fold where it crosses this view, in the view's space. Nil on
     /// every other device, and while fully open unless `includeInactive`.
     func duoFold(includeInactive: Bool = false) -> CGRect? {
+        #if os(visionOS)
+        return nil
+        #else
         guard #available(iOS 27.1, *) else { return nil }
         return reservedRegions(kind: .division, options: includeInactive ? .includeInactive : []).first?.frame
+        #endif
     }
 
     /// True when iPhone Duo's fold, folded or not, runs down this view near its middle,

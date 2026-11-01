@@ -170,11 +170,11 @@ private struct IOSPlexHeroControls: View {
                     Label(item.isInProgress ? "Resume" : "Play", systemImage: "play.fill")
                         .overlay { if actions.preparingID == item.id { ProgressView() } }
                 }
-                .buttonStyle(.glassProminent)
+                .glassProminentButtonStyle()
                 NavigationLink(value: IOSPlexDetailRoute(item: item, scope: "hero")) {
                     Label("Details", systemImage: "info.circle")
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
             }
             .controlSize(.large)
             .padding(.top, 4)
