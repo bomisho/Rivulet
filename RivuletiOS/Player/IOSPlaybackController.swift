@@ -40,6 +40,10 @@ final class IOSPlaybackController: NSObject, ObservableObject {
     private var isRestoring = false
     private let nowPlaying = IOSNowPlaying()
     private var cancellables = Set<AnyCancellable>()
+    #if os(visionOS)
+    /// The window's size before playback shaped it to the video, restored on end.
+    private var sizeBeforePlayback: CGSize?
+    #endif
 
     // MARK: - Caller API
 
@@ -99,6 +103,9 @@ final class IOSPlaybackController: NSObject, ObservableObject {
         cancellables.removeAll()
         UIApplication.shared.isIdleTimerDisabled = false
         self.session = nil
+        #if os(visionOS)
+        restoreWindowSize()
+        #endif
     }
 
     /// The full-screen cover went away without the close button (PiP start excluded).
@@ -123,7 +130,46 @@ final class IOSPlaybackController: NSObject, ObservableObject {
         .receive(on: DispatchQueue.main)
         .sink { [weak self] in self?.transportChanged() }
         .store(in: &cancellables)
+
+        #if os(visionOS)
+        // The window is the screen on Vision Pro: shape it to the picture so
+        // there are no bars, whatever the film's aspect ratio.
+        player.$videoSize
+            .removeDuplicates()
+            .filter { $0.width > 0 && $0.height > 0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.fitWindow(to: $0) }
+            .store(in: &cancellables)
+        #endif
     }
+
+    #if os(visionOS)
+    private var windowScene: UIWindowScene? {
+        surface?.window?.windowScene
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .first { $0.activationState == .foregroundActive }
+    }
+
+    /// Keeps the window's width, sets the height from the video's aspect ratio,
+    /// and holds that ratio while the window is resized.
+    private func fitWindow(to video: CGSize) {
+        guard let scene = windowScene else { return }
+        let current = scene.coordinateSpace.bounds.size
+        guard current.width > 0 else { return }
+        if sizeBeforePlayback == nil { sizeBeforePlayback = current }
+        let aspect = video.width / video.height
+        let width = max(current.width, 1280)
+        let size = CGSize(width: width, height: (width / aspect).rounded())
+        scene.requestGeometryUpdate(.Vision(size: size, resizingRestrictions: .uniform)) { _ in }
+    }
+
+    private func restoreWindowSize() {
+        guard let size = sizeBeforePlayback, let scene = windowScene else { return }
+        sizeBeforePlayback = nil
+        scene.requestGeometryUpdate(.Vision(size: size, resizingRestrictions: .freeform)) { _ in }
+    }
+    #endif
 
     private func transportChanged() {
         guard let player = session?.player else { return }
