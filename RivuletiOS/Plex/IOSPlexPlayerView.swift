@@ -710,7 +710,7 @@ private struct IOSPlexPlayerScreen: View {
                     Image(systemName: "list.bullet.rectangle")
                         .font(.body.weight(.semibold))
                         .frame(width: 44, height: 44)
-                        .platformGlass(in: .circle, interactive: true)
+                        .playerGlass(in: .circle, interactive: true)
                 }
                 .accessibilityLabel("Chapters")
             }
@@ -719,7 +719,7 @@ private struct IOSPlexPlayerScreen: View {
                     Image(systemName: "list.bullet")
                         .font(.body.weight(.semibold))
                         .frame(width: 44, height: 44)
-                        .platformGlass(in: .circle, interactive: true)
+                        .playerGlass(in: .circle, interactive: true)
                 }
                 .accessibilityLabel("Playlist")
             }

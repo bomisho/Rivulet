@@ -260,7 +260,7 @@ private struct IOSLivePlayerScreen: View {
         Image(systemName: systemImage)
             .font(.body.weight(.semibold))
             .frame(width: 44, height: 44)
-            .platformGlass(in: .circle, interactive: true)
+            .playerGlass(in: .circle, interactive: true)
     }
 }
 

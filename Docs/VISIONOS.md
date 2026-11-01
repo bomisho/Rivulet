@@ -22,9 +22,13 @@ package graph changes.
 | --- | --- |
 | Window | Opens at 1366×900 (iPad-like regular width), freely resizable. |
 | Player | Same full-window player and chrome. While playing, the window takes the video's aspect ratio (no black bars) and keeps it when resized; the previous size returns on close. AirPlay button hidden. PiP is gated by `AVPictureInPictureController.isPictureInPictureSupported()`, so it doesn't appear. |
+| Player buttons | Dark translucent platters (`playerGlass` / `playerButtonStyle` in `PlatformGlass.swift`) instead of the bright system glass, so they don't glare over video. |
+| Theater | 🎭 button in the player: Window, Dimmed Room (passthrough dimmed), and three full-immersion environments drawn in code (Cinema, Night Sky, Void) around an enlarged player window. The choice is remembered; the space closes with the player. `RivuletiOS/Player/VisionTheater.swift`. |
 | Downloads | Work via the background `URLSession`; no continued-processing Live Activity (iOS-only API). |
 | App icon | Layered `AppIconVision.solidimagestack` (starfield back, ribbon front). No alternate icons, so the picker is hidden. |
 | Plex identity | `X-Plex-Device` is "Apple Vision Pro"; platform stays "iOS" so the server picks the same transcode profile. |
+
+visionOS builds use `visionOS/Info.plist` (multi-scene, needed for the immersive space) via `INFOPLIST_FILE[sdk=xros*]`; iOS keeps `RivuletiOS/Info.plist`.
 
 All platform branches live in `RivuletiOS/`. `RivuletCore/` stays free of
 `#if os(...)`, per the platform boundary rule in `CLAUDE.md`.

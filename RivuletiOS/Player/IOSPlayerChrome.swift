@@ -175,6 +175,12 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
         .onPreferenceChange(BottomBarTopKey.self) { bottomBarTop = $0 }
         .foregroundStyle(.white)
         .tint(.white)
+        #if os(visionOS)
+        // Every control below draws its own dark platter (playerGlass /
+        // playerButtonStyle); the system's bordered default would add a bright one.
+        .buttonStyle(.plain)
+        .visionTheaterHost()
+        #endif
         .environment(\.colorScheme, .dark)
         .preferredColorScheme(.dark)
         .statusBarHidden(!chromeVisible)
@@ -251,11 +257,13 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             Spacer()
             PlatformGlassContainer(spacing: 8) {
                 HStack(spacing: 8) {
-                    #if !os(visionOS)
+                    #if os(visionOS)
+                    TheaterMenu()
+                    #else
                     // Vision Pro is the screen; there is nothing to route video to.
                     IOSRoutePicker()
                         .frame(width: 44, height: 44)
-                        .platformGlass(in: .circle, interactive: true)
+                        .playerGlass(in: .circle, interactive: true)
                         .accessibilityLabel("AirPlay")
                     #endif
                     glassButton(
@@ -304,7 +312,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
 
             if canSkip { skipButton(forward: true) }
         }
-        .glassButtonStyle()
+        .playerButtonStyle()
         .buttonBorderShape(.circle)
     }
 
@@ -362,7 +370,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             } else {
                 Button("Go Live") { interact(actions.goLive) }
                     .font(.caption.weight(.semibold))
-                    .glassButtonStyle()
+                    .playerButtonStyle()
             }
         }
     }
@@ -431,7 +439,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 6)
         }
-        .platformGlass(in: .capsule, interactive: true)
+        .playerGlass(in: .capsule, interactive: true)
         .accessibilityLabel("Playback speed")
     }
 
@@ -453,7 +461,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .frame(minHeight: 44)
                 .padding(.horizontal, 12)
         }
-        .platformGlass(in: .capsule, interactive: true)
+        .playerGlass(in: .capsule, interactive: true)
         .accessibilityLabel("Quality")
         .accessibilityValue(quality.label)
     }
@@ -487,7 +495,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .font(.body.weight(.semibold))
                 .frame(width: 44, height: 44)
         }
-        .platformGlass(in: .circle, interactive: true)
+        .playerGlass(in: .circle, interactive: true)
         .accessibilityLabel("Audio and Subtitles")
     }
 
@@ -541,7 +549,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                             .padding(.horizontal, 8)
                             .frame(minHeight: 36)
                         }
-                        .glassButtonStyle()
+                        .playerButtonStyle()
                     }
                 }
             }
@@ -564,7 +572,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .multilineTextAlignment(.center)
             HStack(spacing: 12) {
                 Button("Close", action: actions.close)
-                    .glassButtonStyle()
+                    .playerButtonStyle()
                 if failure.canRetry {
                     // The chrome's white tint fills this button, so the label goes dark.
                     Button(action: actions.retry) { Text("Retry").foregroundStyle(.black) }
@@ -574,7 +582,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
         }
         .padding(24)
         .frame(maxWidth: 380)
-        .platformGlass(in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .playerGlass(in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .padding()
     }
 
@@ -589,7 +597,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 14)
-            .platformGlass(in: .capsule)
+            .playerGlass(in: .capsule)
             .padding(.horizontal, 48)
             if ripple.leading { Spacer() }
         }
@@ -604,7 +612,7 @@ struct IOSPlayerChrome<Video: View, Trailing: View>: View {
                 .font(.body.weight(.semibold))
                 .frame(width: 30, height: 30)
         }
-        .glassButtonStyle()
+        .playerButtonStyle()
         .buttonBorderShape(.circle)
         .accessibilityLabel(label)
     }

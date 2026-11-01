@@ -72,6 +72,12 @@ struct RivuletiOSApp: App {
         // views, regular-width grids) apply, and it can be resized freely.
         .defaultSize(width: 1366, height: 900)
         .windowResizability(.contentMinSize)
+
+        // Theater modes: an environment around the player window.
+        ImmersiveSpace(id: VisionTheater.spaceID) {
+            TheaterSpaceView()
+        }
+        .immersionStyle(selection: .constant(.full), in: .full)
         #endif
     }
 

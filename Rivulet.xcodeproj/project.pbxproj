@@ -850,6 +850,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = RivuletiOS/Info.plist;
+				"INFOPLIST_FILE[sdk=xros*]" = visionOS/Info.plist;
+				"INFOPLIST_FILE[sdk=xrsimulator*]" = visionOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rivulet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Rivulet connects to media servers on your local network, such as your Plex server, to stream your library.";
@@ -893,6 +895,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = RivuletiOS/Info.plist;
+				"INFOPLIST_FILE[sdk=xros*]" = visionOS/Info.plist;
+				"INFOPLIST_FILE[sdk=xrsimulator*]" = visionOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rivulet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Rivulet connects to media servers on your local network, such as your Plex server, to stream your library.";

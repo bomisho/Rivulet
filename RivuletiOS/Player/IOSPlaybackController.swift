@@ -43,6 +43,7 @@ final class IOSPlaybackController: NSObject, ObservableObject {
     #if os(visionOS)
     /// The window's size before playback shaped it to the video, restored on end.
     private var sizeBeforePlayback: CGSize?
+    private var videoSize: CGSize?
     #endif
 
     // MARK: - Caller API
@@ -140,6 +141,17 @@ final class IOSPlaybackController: NSObject, ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.fitWindow(to: $0) }
             .store(in: &cancellables)
+
+        // Entering or leaving a theater environment resizes the screen.
+        VisionTheater.shared.$mode
+            .removeDuplicates()
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self, let size = self.videoSize else { return }
+                self.fitWindow(to: size)
+            }
+            .store(in: &cancellables)
         #endif
     }
 
@@ -158,8 +170,12 @@ final class IOSPlaybackController: NSObject, ObservableObject {
         let current = scene.coordinateSpace.bounds.size
         guard current.width > 0 else { return }
         if sizeBeforePlayback == nil { sizeBeforePlayback = current }
+        videoSize = video
         let aspect = video.width / video.height
-        let width = max(current.width, 1280)
+        // The window's own width, or a cinema-sized screen inside an environment
+        // (the system clamps it to what fits).
+        let base = max(sizeBeforePlayback?.width ?? current.width, 1280)
+        let width = VisionTheater.shared.mode.isImmersive ? max(base * 1.8, 2400) : base
         let size = CGSize(width: width, height: (width / aspect).rounded())
         requestWindow(size, restrictions: .uniform, in: scene)
     }
@@ -172,6 +188,7 @@ final class IOSPlaybackController: NSObject, ObservableObject {
     }
 
     private func restoreWindowSize() {
+        videoSize = nil
         guard let size = sizeBeforePlayback, let scene = windowScene else { return }
         sizeBeforePlayback = nil
         requestWindow(size, restrictions: .freeform, in: scene)
